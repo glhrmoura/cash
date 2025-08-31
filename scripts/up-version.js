@@ -28,7 +28,7 @@ try {
   console.log('📝 Committing version update...');
 
   execSync(`git add ${swPath}`);
-  execSync(`git commit -m "chore: bump service worker version to ${newVersion}"`);
+  execSync(`git commit -m"chore: bump service worker version to ${newVersion}"`);
 
   console.log('🚀 Ready for push!');
 } catch (error) {
