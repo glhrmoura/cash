@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/auth';
-import { Loader2 } from 'lucide-react';
+import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 
 const LoginPage: React.FC = () => {
   const { signInWithGoogle, loading } = useAuth();
@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <ThreeDotsLoader size="sm" className="mr-2" />
                 Signing in...
               </>
             ) : (
