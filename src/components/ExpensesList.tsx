@@ -6,10 +6,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Expense } from '@/types/expense';
+import ExpenseItemSkeleton from './ExpenseItemSkeleton';
 
 interface ExpensesListProps {
   expenses: Expense[];
   paidExpenses: Set<string>;
+  loading: boolean;
   onTogglePaid: (id: string) => void;
   onEditExpense: (expense: Expense) => void;
   onDeleteExpense: (id: string) => void;
@@ -18,6 +20,7 @@ interface ExpensesListProps {
 export function ExpensesList({
   expenses,
   paidExpenses,
+  loading,
   onTogglePaid,
   onEditExpense,
   onDeleteExpense,
@@ -99,31 +102,41 @@ export function ExpensesList({
       </div>
 
       <div className="space-y-3">
-        {expenses
-          .sort((a, b) => {
-            const aIsPaid = paidExpenses.has(a.id);
-            const bIsPaid = paidExpenses.has(b.id);
-            
-            if (aIsPaid && !bIsPaid) return 1;
-            if (!aIsPaid && bIsPaid) return -1;
-            
-            const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            return sortOrder === 'desc' ? timeDiff : -timeDiff;
-          })
-          .map((expense) => (
-            <ExpenseItem
-              key={expense.id}
-              id={expense.id}
-              title={expense.title}
-              value={expense.value}
-              color={expense.color}
-              icon={expense.icon}
-              isPaid={paidExpenses.has(expense.id)}
-              onTogglePaid={onTogglePaid}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
+        {loading ? (
+          <>
+            <ExpenseItemSkeleton />
+            <ExpenseItemSkeleton />
+            <ExpenseItemSkeleton />
+            <ExpenseItemSkeleton />
+            <ExpenseItemSkeleton />
+          </>
+        ) : (
+          expenses
+            .sort((a, b) => {
+              const aIsPaid = paidExpenses.has(a.id);
+              const bIsPaid = paidExpenses.has(b.id);
+              
+              if (aIsPaid && !bIsPaid) return 1;
+              if (!aIsPaid && bIsPaid) return -1;
+              
+              const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+              return sortOrder === 'desc' ? timeDiff : -timeDiff;
+            })
+            .map((expense) => (
+              <ExpenseItem
+                key={expense.id}
+                id={expense.id}
+                title={expense.title}
+                value={expense.value}
+                color={expense.color}
+                icon={expense.icon}
+                isPaid={paidExpenses.has(expense.id)}
+                onTogglePaid={onTogglePaid}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))
+        )}
       </div>
 
       <EditExpenseDialog
