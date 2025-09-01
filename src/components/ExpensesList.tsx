@@ -112,8 +112,6 @@ export function ExpensesList({
             <ExpenseItemSkeleton />
             <ExpenseItemSkeleton />
             <ExpenseItemSkeleton />
-            <ExpenseItemSkeleton />
-            <ExpenseItemSkeleton />
           </>
         ) : (
           expenses
