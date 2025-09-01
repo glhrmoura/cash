@@ -8,7 +8,7 @@ import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import { InstallBanner } from '@/components/InstallBanner';
 import LoginPage from '@/components/LoginPage';
-import { Loader2 } from 'lucide-react';
+import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,7 @@ const AppRoutes = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <ThreeDotsLoader size="lg" />
       </div>
     );
   }
