@@ -11,6 +11,7 @@ const Index = () => {
   const { user } = useAuth();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getMonthKey = (date: Date) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -19,8 +20,10 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
 
+    setLoading(true);
     const unsubscribeExpenses = expenseService.subscribeToExpenses(user.uid, (expenses) => {
       setExpenses(expenses);
+      setLoading(false);
     });
 
     return () => {
@@ -110,6 +113,7 @@ const Index = () => {
         <ExpensesList
           expenses={expenses}
           paidExpenses={currentMonthPaid}
+          loading={loading}
           onTogglePaid={handleTogglePaid}
           onEditExpense={handleEditExpense}
           onDeleteExpense={handleDeleteExpense}
