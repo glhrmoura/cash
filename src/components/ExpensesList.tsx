@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Expense } from '@/types/expense';
 import ExpenseItemSkeleton from './ExpenseItemSkeleton';
+import ExpensesSummarySkeleton from './ExpensesSummarySkeleton';
 
 interface ExpensesListProps {
   expenses: Expense[];
@@ -71,22 +72,26 @@ export function ExpensesList({
 
   return (
     <div className="space-y-4">
-      <Card className="p-4 bg-card/50">
-        <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 md:text-center">
-          <div className="flex justify-between items-center md:flex-col md:justify-center">
-            <p className="text-sm text-muted-foreground">Total</p>
-            <p className="text-lg font-bold">R$ {totalValue.toFixed(2).replace('.', ',')}</p>
+      {loading ? (
+        <ExpensesSummarySkeleton />
+      ) : (
+        <Card className="p-4 bg-card/50">
+          <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 md:text-center">
+            <div className="flex justify-between items-center md:flex-col md:justify-center">
+              <p className="text-sm text-muted-foreground">Total</p>
+              <p className="text-lg font-bold">R$ {totalValue.toFixed(2).replace('.', ',')}</p>
+            </div>
+            <div className="flex justify-between items-center md:flex-col md:justify-center">
+              <p className="text-sm text-muted-foreground">Pago</p>
+              <p className="text-lg font-bold text-success">R$ {paidValue.toFixed(2).replace('.', ',')}</p>
+            </div>
+            <div className="flex justify-between items-center md:flex-col md:justify-center">
+              <p className="text-sm text-muted-foreground">Pendentes</p>
+              <p className="text-lg font-bold text-destructive">R$ {unpaidValue.toFixed(2).replace('.', ',')}</p>
+            </div>
           </div>
-          <div className="flex justify-between items-center md:flex-col md:justify-center">
-            <p className="text-sm text-muted-foreground">Pago</p>
-            <p className="text-lg font-bold text-success">R$ {paidValue.toFixed(2).replace('.', ',')}</p>
-          </div>
-          <div className="flex justify-between items-center md:flex-col md:justify-center">
-            <p className="text-sm text-muted-foreground">Pendentes</p>
-            <p className="text-lg font-bold text-destructive">R$ {unpaidValue.toFixed(2).replace('.', ',')}</p>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      )}
 
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Despesas</h2>
