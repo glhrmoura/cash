@@ -1,7 +1,7 @@
 <p align="center">
   <img
     style="object: contain; height: 150px"
-    src="https://i.imgur.com/lcO2xq4.png"
+    src="https://i.imgur.com/GK9y85b.png"
   />
 </p>
 
