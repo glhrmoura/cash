@@ -9,6 +9,10 @@
 
 PWA application to manage your expenses simply and efficiently. Track your monthly expenses, organize by categories with custom colors and icons, and mark expenses as paid. All data is synchronized in the cloud with Firebase.
 
+### Demo
+
+[Cash](https://glhrmoura-cash.netlify.app)    
+
 ### License
 
 [MIT](https://github.com/glhrmoura/cash/blob/master/LICENSE)
