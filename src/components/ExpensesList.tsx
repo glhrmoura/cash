@@ -62,6 +62,14 @@ export function ExpensesList({
   const toggleSortOrder = () => {
     setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
   };
+
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
   const totalValue = expenses.reduce((sum, expense) => sum + expense.value, 0);
   const paidValue = expenses
     .filter(expense => paidExpenses.has(expense.id))
@@ -79,15 +87,15 @@ export function ExpensesList({
           <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 md:text-center">
             <div className="flex justify-between items-center md:flex-col md:justify-center">
               <p className="text-sm text-muted-foreground">Total</p>
-              <p className="text-lg font-bold">R$ {totalValue.toFixed(2).replace('.', ',')}</p>
+              <p className="text-lg font-bold">R$ {formatCurrency(totalValue)}</p>
             </div>
             <div className="flex justify-between items-center md:flex-col md:justify-center">
               <p className="text-sm text-muted-foreground">Pago</p>
-              <p className="text-lg font-bold text-success">R$ {paidValue.toFixed(2).replace('.', ',')}</p>
+              <p className="text-lg font-bold text-success">R$ {formatCurrency(paidValue)}</p>
             </div>
             <div className="flex justify-between items-center md:flex-col md:justify-center">
               <p className="text-sm text-muted-foreground">Pendentes</p>
-              <p className="text-lg font-bold text-destructive">R$ {unpaidValue.toFixed(2).replace('.', ',')}</p>
+              <p className="text-lg font-bold text-destructive">R$ {formatCurrency(unpaidValue)}</p>
             </div>
           </div>
         </Card>
