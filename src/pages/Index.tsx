@@ -4,7 +4,7 @@ import { ExpensesList } from '@/components/ExpensesList';
 import { AddExpenseDialog } from '@/components/AddExpenseDialog';
 import Header from '@/components/Header';
 import { useAuth } from '@/contexts/auth';
-import { expenseService } from '@/services/expense';
+import { expenseService, GUEST_USER_ID } from '@/services/expense';
 import { Expense } from '@/types/expense';
 
 const Index = () => {
@@ -12,24 +12,42 @@ const Index = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
+  const userId = user?.uid ?? GUEST_USER_ID;
 
   const getMonthKey = (date: Date) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
   };
 
   useEffect(() => {
-    if (!user) return;
+    let cancelled = false;
+    let unsubscribe = () => {};
 
-    setLoading(true);
-    const unsubscribeExpenses = expenseService.subscribeToExpenses(user.uid, (expenses) => {
-      setExpenses(expenses);
-      setLoading(false);
-    });
+    const setup = async () => {
+      setLoading(true);
+
+      if (user) {
+        try {
+          await expenseService.migrateGuestExpenses(user.uid);
+        } catch (error) {
+          console.error('Error migrating guest expenses:', error);
+        }
+      }
+
+      if (cancelled) return;
+
+      unsubscribe = expenseService.subscribeToExpenses(userId, (nextExpenses) => {
+        setExpenses(nextExpenses);
+        setLoading(false);
+      });
+    };
+
+    setup();
 
     return () => {
-      unsubscribeExpenses();
+      cancelled = true;
+      unsubscribe();
     };
-  }, [user]);
+  }, [user, userId]);
 
   const currentMonthKey = getMonthKey(currentMonth);
   const currentMonthPaid = new Set(
@@ -55,27 +73,23 @@ const Index = () => {
   };
 
   const handleTogglePaid = async (expenseId: string) => {
-    if (!user) return;
-    
     const expense = expenses.find(exp => exp.id === expenseId);
     if (!expense) return;
     
     const isCurrentlyPaid = expense.done.includes(currentMonthKey);
     
     try {
-      await expenseService.toggleExpenseDone(expenseId, currentMonthKey, !isCurrentlyPaid);
+      await expenseService.toggleExpenseDone(expenseId, currentMonthKey, !isCurrentlyPaid, userId);
     } catch (error) {
       console.error('Error updating expense done status:', error);
     }
   };
 
   const handleAddExpense = async (newExpense: Omit<Expense, 'id' | 'userId'>) => {
-    if (!user) return;
-    
     try {
       const expenseWithUser = {
         ...newExpense,
-        userId: user.uid
+        userId
       };
       await expenseService.addExpense(expenseWithUser);
     } catch (error) {
@@ -85,17 +99,15 @@ const Index = () => {
 
   const handleEditExpense = async (editedExpense: Expense) => {
     try {
-      await expenseService.updateExpense(editedExpense.id, editedExpense);
+      await expenseService.updateExpense(editedExpense.id, editedExpense, userId);
     } catch (error) {
       console.error('Error updating expense:', error);
     }
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
-    if (!user) return;
-    
     try {
-      await expenseService.deleteExpense(expenseId);
+      await expenseService.deleteExpense(expenseId, userId);
     } catch (error) {
       console.error('Error deleting expense:', error);
     }

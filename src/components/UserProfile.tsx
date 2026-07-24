@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/auth';
-import { LogOut, User } from 'lucide-react';
+import { LogIn, LogOut, User } from 'lucide-react';
+import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 
 const UserProfile: React.FC = () => {
-  const { user, logout } = useAuth();
-
-  if (!user) return null;
+  const { user, logout, signInWithGoogle } = useAuth();
+  const [signingIn, setSigningIn] = useState(false);
 
   const handleLogout = async () => {
     try {
       await logout();
     } catch (error) {
       console.error('Failed to logout:', error);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setSigningIn(true);
+      await signInWithGoogle();
+    } catch (error) {
+      console.error('Failed to sign in:', error);
+    } finally {
+      setSigningIn(false);
     }
   };
 
@@ -26,6 +37,29 @@ const UserProfile: React.FC = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  if (!user) {
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleGoogleSignIn}
+        disabled={signingIn}
+      >
+        {signingIn ? (
+          <>
+            <ThreeDotsLoader size="sm" className="mr-2" />
+            Entrando...
+          </>
+        ) : (
+          <>
+            <LogIn className="mr-2 h-4 w-4" />
+            Entrar
+          </>
+        )}
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>

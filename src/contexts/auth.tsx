@@ -4,7 +4,6 @@ import {
   signInWithPopup, 
   signOut, 
   onAuthStateChanged,
-  GoogleAuthProvider 
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 
@@ -44,25 +43,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGoogle = async () => {
     try {
-      setLoading(true);
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error('Error signing in with Google:', error);
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      setLoading(true);
       await signOut(auth);
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 

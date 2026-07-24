@@ -4,7 +4,7 @@ import { EditExpenseDialog } from './EditExpenseDialog';
 import { DeleteExpenseDialog } from './DeleteExpenseDialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, Wallet } from 'lucide-react';
 import { Expense } from '@/types/expense';
 import ExpenseItemSkeleton from './ExpenseItemSkeleton';
 import ExpensesSummarySkeleton from './ExpensesSummarySkeleton';
@@ -121,6 +121,16 @@ export function ExpensesList({
             <ExpenseItemSkeleton />
             <ExpenseItemSkeleton />
           </>
+        ) : expenses.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <Wallet className="h-10 w-10 text-muted-foreground/50" />
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-foreground">Nenhuma despesa ainda</p>
+              <p className="text-sm text-muted-foreground">
+                Adicione sua primeira despesa para começar
+              </p>
+            </div>
+          </div>
         ) : (
           expenses
             .sort((a, b) => {

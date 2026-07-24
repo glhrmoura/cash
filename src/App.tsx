@@ -7,13 +7,12 @@ import { AuthProvider, useAuth } from '@/contexts/auth';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import { InstallBanner } from '@/components/InstallBanner';
-import LoginPage from '@/components/LoginPage';
 import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 
 const queryClient = new QueryClient();
 
 const AppRoutes = () => {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -21,10 +20,6 @@ const AppRoutes = () => {
         <ThreeDotsLoader size="lg" />
       </div>
     );
-  }
-
-  if (!user) {
-    return <LoginPage />;
   }
 
   return (
