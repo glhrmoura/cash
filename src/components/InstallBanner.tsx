@@ -7,11 +7,22 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+const DISMISS_STORAGE_KEY = 'cash:install-banner-dismissed';
+
+const isStandalone = () => (
+  window.matchMedia('(display-mode: standalone)').matches
+  || ('standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone))
+);
+
 export function InstallBanner() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
+    if (isStandalone() || localStorage.getItem(DISMISS_STORAGE_KEY) === 'true') {
+      return;
+    }
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -19,6 +30,7 @@ export function InstallBanner() {
     };
 
     const handleAppInstalled = () => {
+      localStorage.setItem(DISMISS_STORAGE_KEY, 'true');
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     };
@@ -39,12 +51,14 @@ export function InstallBanner() {
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
+      localStorage.setItem(DISMISS_STORAGE_KEY, 'true');
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     }
   };
 
   const handleDismiss = () => {
+    localStorage.setItem(DISMISS_STORAGE_KEY, 'true');
     setShowInstallPrompt(false);
   };
 
