@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { ExpenseItem } from './ExpenseItem';
 import { EditExpenseDialog } from './EditExpenseDialog';
 import { DeleteExpenseDialog } from './DeleteExpenseDialog';
+import { AddExpenseDialog } from './AddExpenseDialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown, Wallet } from 'lucide-react';
+import { ArrowUpDown, Plus, Wallet } from 'lucide-react';
 import { Expense } from '@/types/expense';
 import ExpenseItemSkeleton from './ExpenseItemSkeleton';
 import ExpensesSummarySkeleton from './ExpensesSummarySkeleton';
@@ -16,6 +17,7 @@ interface ExpensesListProps {
   onTogglePaid: (id: string) => void;
   onEditExpense: (expense: Expense) => void;
   onDeleteExpense: (id: string) => void;
+  onAddExpense: (expense: Omit<Expense, 'id' | 'userId'>) => void;
 }
 
 export function ExpensesList({
@@ -25,6 +27,7 @@ export function ExpensesList({
   onTogglePaid,
   onEditExpense,
   onDeleteExpense,
+  onAddExpense,
 }: ExpensesListProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -101,9 +104,9 @@ export function ExpensesList({
         </Card>
       )}
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Despesas</h2>
-        {!loading && expenses.length > 0 && (
+      {(!loading && expenses.length > 0) && (
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold">Despesas</h2>
           <Button
             variant="outline"
             size="sm"
@@ -113,8 +116,8 @@ export function ExpensesList({
             <ArrowUpDown className="w-4 h-4" />
             {sortOrder === 'desc' ? 'Mais recentes' : 'Mais antigas'}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="space-y-3">
         {loading ? (
@@ -132,6 +135,15 @@ export function ExpensesList({
                 Adicione sua primeira despesa para começar
               </p>
             </div>
+            <AddExpenseDialog
+              onAddExpense={onAddExpense}
+              trigger={
+                <Button className="mt-2">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Adicionar despesa
+                </Button>
+              }
+            />
           </div>
         ) : (
           expenses

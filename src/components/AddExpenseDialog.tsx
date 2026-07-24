@@ -12,9 +12,10 @@ import { useCurrencyMask } from '@/hooks/use-currency-mask';
 
 interface AddExpenseDialogProps {
   onAddExpense: (expense: Omit<Expense, 'id' | 'userId'>) => void;
+  trigger?: React.ReactNode;
 }
 
-export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
+export function AddExpenseDialog({ onAddExpense, trigger }: AddExpenseDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const { value, handleChange, getNumericValue, setFormattedValue } = useCurrencyMask();
@@ -47,11 +48,13 @@ export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div 
-          className="flex bg-primary items-center justify-center cursor-pointer h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <Plus className="w-6 h-6 text-black" />
-        </div>
+        {trigger ?? (
+          <div 
+            className="flex bg-primary items-center justify-center cursor-pointer h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <Plus className="w-6 h-6 text-black" />
+          </div>
+        )}
       </DialogTrigger>
       <DialogContent className="w-[90%] sm:max-w-md h-[80dvh] sm:h-[90dvh] flex flex-col">
         <DialogHeader className="px-6 pt-6">
