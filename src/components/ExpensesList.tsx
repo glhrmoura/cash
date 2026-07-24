@@ -103,15 +103,17 @@ export function ExpensesList({
 
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Despesas</h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={toggleSortOrder}
-          className="flex items-center gap-2"
-        >
-          <ArrowUpDown className="w-4 h-4" />
-          {sortOrder === 'desc' ? 'Mais recentes' : 'Mais antigas'}
-        </Button>
+        {!loading && expenses.length > 0 && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleSortOrder}
+            className="flex items-center gap-2"
+          >
+            <ArrowUpDown className="w-4 h-4" />
+            {sortOrder === 'desc' ? 'Mais recentes' : 'Mais antigas'}
+          </Button>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -123,7 +125,7 @@ export function ExpensesList({
           </>
         ) : expenses.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-            <Wallet className="h-10 w-10 text-muted-foreground/50" />
+            <Wallet className="h-10 w-10 text-white" />
             <div className="space-y-1">
               <p className="text-sm font-medium text-foreground">Nenhuma despesa ainda</p>
               <p className="text-sm text-muted-foreground">
