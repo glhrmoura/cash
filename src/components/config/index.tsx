@@ -33,7 +33,7 @@ export function ConfigPage({
   const appVersion = useAppVersion();
 
   return (
-    <div className="app-config container mx-auto flex max-w-2xl flex-col gap-6 px-4">
+    <div className="app-config mx-auto flex max-w-2xl flex-col gap-6">
       <header>
         <h2 className="text-xl font-semibold tracking-tight">{t('config.title')}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t('config.description')}</p>

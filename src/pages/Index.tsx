@@ -116,7 +116,7 @@ const Index = () => {
   return (
     <div className="min-h-dvh bg-background">
       <Header />
-      <div className="app-main container max-w-2xl mx-auto space-y-6 p-4">
+      <div className="app-main mx-auto max-w-2xl space-y-6">
         <MonthNavigator
           currentMonth={currentMonth}
           onPreviousMonth={handlePreviousMonth}
