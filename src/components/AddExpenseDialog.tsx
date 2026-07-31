@@ -10,7 +10,7 @@ import { Expense } from '@/types/expense';
 import { ColorPicker } from '@/components/ColorPicker';
 import { IconPicker } from '@/components/IconPicker';
 import { useCurrencyMask } from '@/hooks/use-currency-mask';
-import { blockPointerEvents, blurActiveElement, waitForKeyboardClose } from '@/utils/ios-keyboard';
+import { blockPointerEvents, blurActiveElement, lockBodyScroll, waitForKeyboardClose } from '@/utils/ios-keyboard';
 
 interface AddExpenseDialogProps {
   onAddExpense: (expense: Omit<Expense, 'id' | 'userId'>) => void;
@@ -28,25 +28,7 @@ export function AddExpenseDialog({ onAddExpense, trigger }: AddExpenseDialogProp
 
   useEffect(() => {
     if (!open) return;
-
-    const scrollY = window.scrollY;
-    const previousOverflow = document.body.style.overflow;
-    const previousPosition = document.body.style.position;
-    const previousTop = document.body.style.top;
-    const previousWidth = document.body.style.width;
-
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.body.style.position = previousPosition;
-      document.body.style.top = previousTop;
-      document.body.style.width = previousWidth;
-      window.scrollTo(0, scrollY);
-    };
+    return lockBodyScroll();
   }, [open]);
 
   const resetForm = () => {
@@ -104,14 +86,14 @@ export function AddExpenseDialog({ onAddExpense, trigger }: AddExpenseDialogProp
       {open &&
         createPortal(
           <div
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 px-4 pt-[max(1rem,var(--safe-area-top))] pb-[max(1rem,var(--safe-area-bottom))] backdrop-blur-md"
             onMouseDown={(event) => {
               if (event.target === event.currentTarget) {
                 void closeSafely();
               }
             }}
           >
-            <div className="flex h-[min(80dvh,40rem)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
+            <div className="flex max-h-[min(80dvh,40rem)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
               <div className="flex items-center justify-between border-b border-border px-6 py-4">
                 <h2 className="text-lg font-semibold tracking-tight">{t('expenseForm.addTitle')}</h2>
                 <button

@@ -21,7 +21,8 @@
     "sortOldest": "Más antiguas",
     "emptyTitle": "Aún no hay gastos",
     "emptyDescription": "Agrega tu primer gasto para comenzar",
-    "addExpense": "Agregar gasto"
+    "addExpense": "Agregar gasto",
+    "currentMonth": "Mes actual"
   },
   "months": {
     "0": "Enero",

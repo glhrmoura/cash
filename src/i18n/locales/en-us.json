@@ -21,7 +21,8 @@
     "sortOldest": "Oldest",
     "emptyTitle": "No expenses yet",
     "emptyDescription": "Add your first expense to get started",
-    "addExpense": "Add expense"
+    "addExpense": "Add expense",
+    "currentMonth": "Current month"
   },
   "months": {
     "0": "January",

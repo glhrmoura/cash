@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useAuth } from '@/contexts/auth';
 import { LogIn, LogOut, User } from 'lucide-react';
 import ThreeDotsLoader from '@/components/ThreeDotsLoader';
+import { auth } from '@/lib/firebase';
 
 const UserProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -21,13 +22,52 @@ const UserProfile: React.FC = () => {
   };
 
   const handleGoogleSignIn = async () => {
+    if (signingIn) return;
+
+    setSigningIn(true);
+    let settled = false;
+
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.removeEventListener('focus', onWindowFocus);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.clearTimeout(fallbackTimeout);
+      setSigningIn(false);
+    };
+
+    const maybeFinishAfterCancel = () => {
+      window.setTimeout(() => {
+        if (!auth.currentUser) {
+          finish();
+        }
+      }, 400);
+    };
+
+    const onWindowFocus = () => {
+      maybeFinishAfterCancel();
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        maybeFinishAfterCancel();
+      }
+    };
+
+    window.addEventListener('focus', onWindowFocus);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    const fallbackTimeout = window.setTimeout(finish, 120000);
+
     try {
-      setSigningIn(true);
       await signInWithGoogle();
+      if (auth.currentUser) {
+        finish();
+        return;
+      }
+      maybeFinishAfterCancel();
     } catch (error) {
       console.error('Failed to sign in:', error);
-    } finally {
-      setSigningIn(false);
+      finish();
     }
   };
 
@@ -44,18 +84,18 @@ const UserProfile: React.FC = () => {
     return (
       <Button
         variant="outline"
-        size="sm"
         onClick={handleGoogleSignIn}
         disabled={signingIn}
+        className="h-10 rounded-xl border-border bg-card px-3 text-muted-foreground hover:bg-accent hover:text-foreground"
       >
         {signingIn ? (
           <>
-            <ThreeDotsLoader size="sm" className="mr-2" />
+            <ThreeDotsLoader size="sm" />
             {t('auth.signingIn')}
           </>
         ) : (
           <>
-            <LogIn className="mr-2 h-4 w-4" />
+            <LogIn className="h-5 w-5" />
             {t('auth.signIn')}
           </>
         )}

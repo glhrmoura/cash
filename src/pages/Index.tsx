@@ -72,6 +72,10 @@ const Index = () => {
     });
   };
 
+  const handleCurrentMonth = () => {
+    setCurrentMonth(new Date());
+  };
+
   const handleTogglePaid = async (expenseId: string) => {
     const expense = expenses.find(exp => exp.id === expenseId);
     if (!expense) return;
@@ -121,6 +125,7 @@ const Index = () => {
           currentMonth={currentMonth}
           onPreviousMonth={handlePreviousMonth}
           onNextMonth={handleNextMonth}
+          onCurrentMonth={handleCurrentMonth}
         />
         <ExpensesList
           expenses={expenses}

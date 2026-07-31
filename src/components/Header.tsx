@@ -41,7 +41,7 @@ const Header: React.FC = () => {
               <Link
                 to="/config"
                 aria-label={t('nav.settings')}
-                className="rounded-xl border border-border bg-card p-2.5 text-muted-foreground transition hover:text-foreground"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition hover:text-foreground"
               >
                 <Settings className="h-5 w-5" />
               </Link>

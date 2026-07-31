@@ -45,3 +45,20 @@ export function blockPointerEvents(durationMs = 450) {
     document.body.style.pointerEvents = previous;
   }, durationMs);
 }
+
+export function lockBodyScroll() {
+  const html = document.documentElement;
+  const previousHtmlOverflow = html.style.overflow;
+  const previousBodyOverflow = document.body.style.overflow;
+  const previousBodyOverscroll = document.body.style.overscrollBehavior;
+
+  html.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  document.body.style.overscrollBehavior = 'none';
+
+  return () => {
+    html.style.overflow = previousHtmlOverflow;
+    document.body.style.overflow = previousBodyOverflow;
+    document.body.style.overscrollBehavior = previousBodyOverscroll;
+  };
+}
