@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -92,9 +93,9 @@ export function EditExpenseDialog({
 
   if (!open || !expense) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 p-4 backdrop-blur-md"
       onClick={(event) => {
         if (event.target === event.currentTarget) {
           void closeSafely();
@@ -162,6 +163,7 @@ export function EditExpenseDialog({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
