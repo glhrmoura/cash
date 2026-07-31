@@ -4,7 +4,6 @@ import { ExpenseItem } from './ExpenseItem';
 import { EditExpenseDialog } from './EditExpenseDialog';
 import { DeleteExpenseDialog } from './DeleteExpenseDialog';
 import { AddExpenseDialog } from './AddExpenseDialog';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Plus, Wallet } from 'lucide-react';
 import { Expense } from '@/types/expense';
@@ -61,7 +60,7 @@ export function ExpensesList({
     if (!open) {
       window.setTimeout(() => {
         setSelectedExpense(null);
-      }, 0);
+      }, 300);
     }
   };
 
@@ -96,22 +95,36 @@ export function ExpensesList({
       {loading ? (
         <ExpensesSummarySkeleton />
       ) : hasAnyValue ? (
-        <Card className="p-4 bg-card/50">
-          <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 md:text-center">
-            <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">{t('home.total')}</p>
-              <p className="text-lg font-bold">R$ {formatCurrency(totalValue)}</p>
+        <div className="overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-card via-card/80 to-background/40 p-5 shadow-[inset_0_1px_0_0_hsl(var(--foreground)/0.04)]">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="px-1 text-center">
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                {t('home.total')}
+              </p>
+              <p className="mt-2 text-xl font-semibold tabular-nums tracking-tight text-foreground">
+                R$ {formatCurrency(totalValue)}
+              </p>
             </div>
-            <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">{t('home.paid')}</p>
-              <p className="text-lg font-bold text-success">R$ {formatCurrency(paidValue)}</p>
+            <div className="relative px-1 text-center">
+              <div className="pointer-events-none absolute inset-y-1 left-0 w-px bg-border/80" />
+              <div className="pointer-events-none absolute inset-y-1 right-0 w-px bg-border/80" />
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                {t('home.paid')}
+              </p>
+              <p className="mt-2 text-xl font-semibold tabular-nums tracking-tight text-success">
+                R$ {formatCurrency(paidValue)}
+              </p>
             </div>
-            <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">{t('home.pending')}</p>
-              <p className="text-lg font-bold text-destructive">R$ {formatCurrency(unpaidValue)}</p>
+            <div className="px-1 text-center">
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                {t('home.pending')}
+              </p>
+              <p className="mt-2 text-xl font-semibold tabular-nums tracking-tight text-destructive">
+                R$ {formatCurrency(unpaidValue)}
+              </p>
             </div>
           </div>
-        </Card>
+        </div>
       ) : null}
 
       {!loading && expenses.length > 0 && (

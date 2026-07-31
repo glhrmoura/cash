@@ -90,11 +90,16 @@
         position: fixed;
         inset: 0;
         z-index: 9999;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         background-color: #020817;
         transition: opacity 180ms ease;
+      }
+      @media (max-width: 768px) {
+        #app-splash {
+          display: flex;
+        }
       }
       #app-splash.is-hidden {
         opacity: 0;

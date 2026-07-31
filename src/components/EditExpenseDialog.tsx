@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +9,7 @@ import { Expense } from '@/types/expense';
 import { ColorPicker } from '@/components/ColorPicker';
 import { IconPicker } from '@/components/IconPicker';
 import { useCurrencyMask } from '@/hooks/use-currency-mask';
+import { blockPointerEvents, blurActiveElement, waitForKeyboardClose } from '@/utils/ios-keyboard';
 
 interface EditExpenseDialogProps {
   open: boolean;
@@ -28,6 +29,7 @@ export function EditExpenseDialog({
   const { value, handleChange, getNumericValue, setFormattedValue } = useCurrencyMask();
   const [selectedIcon, setSelectedIcon] = useState<IconName>('droplets');
   const [selectedColor, setSelectedColor] = useState('#3B82F6');
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (expense && open) {
@@ -35,21 +37,46 @@ export function EditExpenseDialog({
       setFormattedValue(expense.value);
       setSelectedIcon(expense.icon);
       setSelectedColor(expense.color);
+      setClosing(false);
     }
   }, [expense, open, setFormattedValue]);
 
-  const closeDialog = () => {
-    const active = document.activeElement;
-    if (active instanceof HTMLElement) {
-      active.blur();
-    }
+  useEffect(() => {
+    if (!open) return;
+
+    const scrollY = window.scrollY;
+    const previousOverflow = document.body.style.overflow;
+    const previousPosition = document.body.style.position;
+    const previousTop = document.body.style.top;
+    const previousWidth = document.body.style.width;
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.position = previousPosition;
+      document.body.style.top = previousTop;
+      document.body.style.width = previousWidth;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
+  const closeSafely = async (afterBlur?: () => void) => {
+    if (closing) return;
+    setClosing(true);
+    blurActiveElement();
+    afterBlur?.();
+    await waitForKeyboardClose();
+    blockPointerEvents();
     onOpenChange(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!title.trim() || !expense) return;
+    if (!title.trim() || !expense || closing) return;
 
     const updatedExpense: Expense = {
       ...expense,
@@ -60,27 +87,37 @@ export function EditExpenseDialog({
       createdAt: expense.createdAt,
     };
 
-    const active = document.activeElement;
-    if (active instanceof HTMLElement) {
-      active.blur();
-    }
-
-    onEditExpense(updatedExpense);
-    onOpenChange(false);
+    await closeSafely(() => onEditExpense(updatedExpense));
   };
 
+  if (!open || !expense) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="w-[90%] sm:max-w-md h-[80dvh] sm:h-[90dvh] flex flex-col"
-        onCloseAutoFocus={(event) => event.preventDefault()}
-        onOpenAutoFocus={(event) => event.preventDefault()}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-md"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          void closeSafely();
+        }
+      }}
+    >
+      <div
+        className="flex h-[min(80dvh,40rem)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg"
+        onClick={(event) => event.stopPropagation()}
       >
-        <DialogHeader className="px-6 pt-6">
-          <DialogTitle>{t('expenseForm.editTitle')}</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-hidden">
-          <div className="space-y-4 flex-1 overflow-y-auto">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-lg font-semibold tracking-tight">{t('expenseForm.editTitle')}</h2>
+          <button
+            type="button"
+            onClick={() => void closeSafely()}
+            className="rounded-lg p-1.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
+            aria-label={t('expenseForm.cancel')}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
+          <div className="space-y-4 flex-1 overflow-y-auto py-4">
             <div className="space-y-2 px-6">
               <Label htmlFor="edit-title">{t('expenseForm.name')}</Label>
               <Input
@@ -109,16 +146,22 @@ export function EditExpenseDialog({
               selectedColor={selectedColor}
             />
           </div>
-          <div className="flex gap-2 p-6 pt-4 border-t">
-            <Button type="button" variant="outline" onClick={closeDialog} className="flex-1">
+          <div className="flex gap-2 border-t border-border p-6 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => void closeSafely()}
+              className="flex-1"
+              disabled={closing}
+            >
               {t('expenseForm.cancel')}
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1" disabled={closing}>
               {t('expenseForm.save')}
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
