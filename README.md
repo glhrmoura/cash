@@ -1,7 +1,7 @@
 <p align="center">
   <img
     style="object: contain; height: 150px"
-    src="https://i.imgur.com/GK9y85b.png"
+    src="https://raw.githubusercontent.com/glhrmoura/glhrmoura/refs/heads/main/public/assets/projects/cash.png"
   />
 </p>
 
