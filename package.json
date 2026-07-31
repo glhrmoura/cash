@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "pre-push": "node scripts/up-version.js",
+    "deploy": "node scripts/deploy.js",
     "prepare": "husky"
   },
   "dependencies": {
