@@ -9,7 +9,6 @@ import Index from './pages/Index';
 import Config from './pages/Config';
 import NotFound from './pages/NotFound';
 import { InstallBanner } from '@/components/InstallBanner';
-import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 import { applyPrimaryColor, loadSettings } from '@/lib/settings';
 
 const queryClient = new QueryClient();
@@ -19,6 +18,10 @@ const AppRoutes = () => {
 
   useEffect(() => {
     applyPrimaryColor(loadSettings().primary);
+  }, []);
+
+  useEffect(() => {
+    if (loading) return;
 
     const splash = document.getElementById('app-splash');
     if (!splash) return;
@@ -26,15 +29,9 @@ const AppRoutes = () => {
     splash.classList.add('is-hidden');
     const timeout = window.setTimeout(() => splash.remove(), 200);
     return () => window.clearTimeout(timeout);
-  }, []);
+  }, [loading]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <ThreeDotsLoader size="lg" />
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <>
