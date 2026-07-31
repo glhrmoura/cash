@@ -1,4 +1,4 @@
-const APP_VERSION = '0.1.20';
+const APP_VERSION = '0.1.21';
 const CACHE_NAME = `cash-app-v${APP_VERSION}`;
 const STATIC_CACHE = `cash-app-static-v${APP_VERSION}`;
 const DYNAMIC_CACHE = `cash-app-dynamic-v${APP_VERSION}`;
