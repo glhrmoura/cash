@@ -66,7 +66,7 @@ export function InstallBanner() {
   if (!showInstallPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-[100] bg-background border border-border rounded-lg p-4 shadow-lg">
+    <div className="app-install-banner fixed left-4 right-4 z-[100] bg-background border border-border rounded-lg p-4 shadow-lg">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <h3 className="font-semibold text-foreground">{t('install.title')}</h3>

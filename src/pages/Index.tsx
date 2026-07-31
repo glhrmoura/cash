@@ -116,7 +116,7 @@ const Index = () => {
   return (
     <div className="min-h-dvh bg-background">
       <Header />
-      <div className="container max-w-2xl mx-auto p-4 pt-24 space-y-6">
+      <div className="app-main container max-w-2xl mx-auto space-y-6 p-4">
         <MonthNavigator
           currentMonth={currentMonth}
           onPreviousMonth={handlePreviousMonth}
@@ -132,7 +132,7 @@ const Index = () => {
           onAddExpense={handleAddExpense}
         />
       </div>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="app-fab fixed right-6 z-50">
         <AddExpenseDialog onAddExpense={handleAddExpense} />
       </div>
     </div>

@@ -30,13 +30,21 @@ export function EditExpenseDialog({
   const [selectedColor, setSelectedColor] = useState('#3B82F6');
 
   useEffect(() => {
-    if (expense) {
+    if (expense && open) {
       setTitle(expense.title);
       setFormattedValue(expense.value);
       setSelectedIcon(expense.icon);
       setSelectedColor(expense.color);
     }
-  }, [expense, setFormattedValue]);
+  }, [expense, open, setFormattedValue]);
+
+  const closeDialog = () => {
+    const active = document.activeElement;
+    if (active instanceof HTMLElement) {
+      active.blur();
+    }
+    onOpenChange(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,52 +60,64 @@ export function EditExpenseDialog({
       createdAt: expense.createdAt,
     };
 
+    const active = document.activeElement;
+    if (active instanceof HTMLElement) {
+      active.blur();
+    }
+
     onEditExpense(updatedExpense);
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[90%] sm:max-w-md h-[80dvh] sm:h-[90dvh] flex flex-col">
+      <DialogContent
+        className="w-[90%] sm:max-w-md h-[80dvh] sm:h-[90dvh] flex flex-col"
+        onCloseAutoFocus={(event) => event.preventDefault()}
+        onOpenAutoFocus={(event) => event.preventDefault()}
+      >
         <DialogHeader className="px-6 pt-6">
           <DialogTitle>{t('expenseForm.editTitle')}</DialogTitle>
         </DialogHeader>
-        <form id="edit-expense-form" onSubmit={handleSubmit} className="space-y-4 flex-1 overflow-y-auto">
-          <div className="space-y-2 px-6">
-            <Label htmlFor="edit-title">{t('expenseForm.name')}</Label>
-            <Input
-              id="edit-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={t('expenseForm.namePlaceholder')}
-              required
+        <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-hidden">
+          <div className="space-y-4 flex-1 overflow-y-auto">
+            <div className="space-y-2 px-6">
+              <Label htmlFor="edit-title">{t('expenseForm.name')}</Label>
+              <Input
+                id="edit-title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder={t('expenseForm.namePlaceholder')}
+                required
+              />
+            </div>
+            <div className="space-y-2 px-6">
+              <Label htmlFor="edit-value">{t('expenseForm.value')}</Label>
+              <Input
+                id="edit-value"
+                type="text"
+                inputMode="decimal"
+                value={value}
+                onChange={(e) => handleChange(e.target.value)}
+                placeholder={t('expenseForm.valuePlaceholder')}
+              />
+            </div>
+            <ColorPicker selectedColor={selectedColor} onColorChange={setSelectedColor} />
+            <IconPicker
+              selectedIcon={selectedIcon}
+              onIconChange={setSelectedIcon}
+              selectedColor={selectedColor}
             />
           </div>
-          <div className="space-y-2 px-6">
-            <Label htmlFor="edit-value">{t('expenseForm.value')}</Label>
-            <Input
-              id="edit-value"
-              type="text"
-              value={value}
-              onChange={(e) => handleChange(e.target.value)}
-              placeholder={t('expenseForm.valuePlaceholder')}
-            />
+          <div className="flex gap-2 p-6 pt-4 border-t">
+            <Button type="button" variant="outline" onClick={closeDialog} className="flex-1">
+              {t('expenseForm.cancel')}
+            </Button>
+            <Button type="submit" className="flex-1">
+              {t('expenseForm.save')}
+            </Button>
           </div>
-          <ColorPicker selectedColor={selectedColor} onColorChange={setSelectedColor} />
-          <IconPicker
-            selectedIcon={selectedIcon}
-            onIconChange={setSelectedIcon}
-            selectedColor={selectedColor}
-          />
         </form>
-        <div className="flex gap-2 p-6 pt-4 border-t">
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
-            {t('expenseForm.cancel')}
-          </Button>
-          <Button type="submit" form="edit-expense-form" className="flex-1">
-            {t('expenseForm.save')}
-          </Button>
-        </div>
       </DialogContent>
     </Dialog>
   );

@@ -54,8 +54,15 @@ export function ExpensesList({
 
   const handleEditSubmit = (expense: Expense) => {
     onEditExpense(expense);
-    setEditDialogOpen(false);
-    setSelectedExpense(null);
+  };
+
+  const handleEditOpenChange = (open: boolean) => {
+    setEditDialogOpen(open);
+    if (!open) {
+      window.setTimeout(() => {
+        setSelectedExpense(null);
+      }, 0);
+    }
   };
 
   const handleDeleteConfirm = (id: string) => {
@@ -177,7 +184,7 @@ export function ExpensesList({
 
       <EditExpenseDialog
         open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
+        onOpenChange={handleEditOpenChange}
         expense={selectedExpense}
         onEditExpense={handleEditSubmit}
       />
