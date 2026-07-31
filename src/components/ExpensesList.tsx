@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ExpenseItem } from './ExpenseItem';
 import { EditExpenseDialog } from './EditExpenseDialog';
 import { DeleteExpenseDialog } from './DeleteExpenseDialog';
@@ -29,13 +30,14 @@ export function ExpensesList({
   onDeleteExpense,
   onAddExpense,
 }: ExpensesListProps) {
+  const { t, i18n } = useTranslation();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const handleEdit = (id: string) => {
-    const expense = expenses.find(exp => exp.id === id);
+    const expense = expenses.find((exp) => exp.id === id);
     if (expense) {
       setSelectedExpense(expense);
       setEditDialogOpen(true);
@@ -43,7 +45,7 @@ export function ExpensesList({
   };
 
   const handleDelete = (id: string) => {
-    const expense = expenses.find(exp => exp.id === id);
+    const expense = expenses.find((exp) => exp.id === id);
     if (expense) {
       setSelectedExpense(expense);
       setDeleteDialogOpen(true);
@@ -63,50 +65,51 @@ export function ExpensesList({
   };
 
   const toggleSortOrder = () => {
-    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('pt-BR', {
+    return new Intl.NumberFormat(i18n.language, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
   };
 
-  const totalValue = expenses.reduce((sum, expense) => sum + expense.value, 0);
+  const totalValue = expenses.reduce((sum, expense) => sum + (expense.value ?? 0), 0);
   const paidValue = expenses
-    .filter(expense => paidExpenses.has(expense.id))
-    .reduce((sum, expense) => sum + expense.value, 0);
+    .filter((expense) => paidExpenses.has(expense.id))
+    .reduce((sum, expense) => sum + (expense.value ?? 0), 0);
   const unpaidValue = expenses
-    .filter(expense => !paidExpenses.has(expense.id))
-    .reduce((sum, expense) => sum + expense.value, 0);
+    .filter((expense) => !paidExpenses.has(expense.id))
+    .reduce((sum, expense) => sum + (expense.value ?? 0), 0);
+  const hasAnyValue = expenses.some((expense) => expense.value != null);
 
   return (
     <div className="space-y-4">
       {loading ? (
         <ExpensesSummarySkeleton />
-      ) : (
+      ) : hasAnyValue ? (
         <Card className="p-4 bg-card/50">
           <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 md:text-center">
             <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">Total</p>
+              <p className="text-sm text-muted-foreground">{t('home.total')}</p>
               <p className="text-lg font-bold">R$ {formatCurrency(totalValue)}</p>
             </div>
             <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">Pago</p>
+              <p className="text-sm text-muted-foreground">{t('home.paid')}</p>
               <p className="text-lg font-bold text-success">R$ {formatCurrency(paidValue)}</p>
             </div>
             <div className="flex justify-between items-center md:flex-col md:justify-center">
-              <p className="text-sm text-muted-foreground">Pendentes</p>
+              <p className="text-sm text-muted-foreground">{t('home.pending')}</p>
               <p className="text-lg font-bold text-destructive">R$ {formatCurrency(unpaidValue)}</p>
             </div>
           </div>
         </Card>
-      )}
+      ) : null}
 
-      {(!loading && expenses.length > 0) && (
+      {!loading && expenses.length > 0 && (
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Despesas</h2>
+          <h2 className="text-lg font-semibold">{t('home.expenses')}</h2>
           <Button
             variant="outline"
             size="sm"
@@ -114,7 +117,7 @@ export function ExpensesList({
             className="flex items-center gap-2"
           >
             <ArrowUpDown className="w-4 h-4" />
-            {sortOrder === 'desc' ? 'Mais recentes' : 'Mais antigas'}
+            {sortOrder === 'desc' ? t('home.sortNewest') : t('home.sortOldest')}
           </Button>
         </div>
       )}
@@ -130,17 +133,15 @@ export function ExpensesList({
           <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
             <Wallet className="h-10 w-10 text-white" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-foreground">Nenhuma despesa ainda</p>
-              <p className="text-sm text-muted-foreground">
-                Adicione sua primeira despesa para começar
-              </p>
+              <p className="text-sm font-medium text-foreground">{t('home.emptyTitle')}</p>
+              <p className="text-sm text-muted-foreground">{t('home.emptyDescription')}</p>
             </div>
             <AddExpenseDialog
               onAddExpense={onAddExpense}
               trigger={
                 <Button className="mt-2">
                   <Plus className="mr-2 h-4 w-4" />
-                  Adicionar despesa
+                  {t('home.addExpense')}
                 </Button>
               }
             />
@@ -150,10 +151,10 @@ export function ExpensesList({
             .sort((a, b) => {
               const aIsPaid = paidExpenses.has(a.id);
               const bIsPaid = paidExpenses.has(b.id);
-              
+
               if (aIsPaid && !bIsPaid) return 1;
               if (!aIsPaid && bIsPaid) return -1;
-              
+
               const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
               return sortOrder === 'desc' ? timeDiff : -timeDiff;
             })

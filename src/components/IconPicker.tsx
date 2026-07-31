@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { DynamicIcon, IconName } from 'lucide-react/dynamic';
@@ -11,71 +12,75 @@ interface IconPickerProps {
   label?: string;
 }
 
-const iconOptions: { icon: IconName; name: string }[] = [
-  { icon: 'droplets', name: 'Água' },
-  { icon: 'zap', name: 'Energia' },
-  { icon: 'wifi', name: 'Internet' },
-  { icon: 'car', name: 'Transporte' },
-  { icon: 'shopping-cart', name: 'Compras' },
-  { icon: 'phone', name: 'Telefone' },
-  { icon: 'home', name: 'Casa' },
-  { icon: 'utensils', name: 'Alimentação' },
-  { icon: 'graduation-cap', name: 'Educação' },
-  { icon: 'heart', name: 'Saúde' },
-  { icon: 'building', name: 'Trabalho' },
-  { icon: 'credit-card', name: 'Cartão' },
-  { icon: 'gamepad-2', name: 'Entretenimento' },
-  { icon: 'music', name: 'Música' },
-  { icon: 'shirt', name: 'Roupas' },
-  { icon: 'book', name: 'Livros' },
-  { icon: 'coffee', name: 'Café' },
-  { icon: 'pizza', name: 'Comida' },
-  { icon: 'beer', name: 'Bebidas' },
-  { icon: 'cigarette', name: 'Tabaco' },
-  { icon: 'pill', name: 'Medicamentos' },
-  { icon: 'gift', name: 'Presentes' },
-  { icon: 'plane', name: 'Viagem' },
-  { icon: 'hotel', name: 'Hospedagem' },
-  { icon: 'camera', name: 'Fotografia' },
-  { icon: 'gamepad', name: 'Jogos' },
-  { icon: 'tv', name: 'TV/Streaming' },
-  { icon: 'headphones', name: 'Áudio' },
-  { icon: 'laptop', name: 'Tecnologia' },
-  { icon: 'smartphone', name: 'Celular' },
-  { icon: 'watch', name: 'Relógio' },
-  { icon: 'glasses', name: 'Óculos' },
-  { icon: 'dumbbell', name: 'Academia' },
-  { icon: 'bike', name: 'Bicicleta' },
-  { icon: 'dog', name: 'Pet' },
-  { icon: 'flower', name: 'Plantas' },
-  { icon: 'hammer', name: 'Ferramentas' },
-  { icon: 'wrench', name: 'Reparos' },
-  { icon: 'paintbrush', name: 'Arte' },
-  { icon: 'bookmark', name: 'Lazer' },
-  { icon: 'star', name: 'Diversos' },
+const iconOptions: IconName[] = [
+  'droplets',
+  'zap',
+  'wifi',
+  'car',
+  'shopping-cart',
+  'phone',
+  'home',
+  'utensils',
+  'graduation-cap',
+  'heart',
+  'building',
+  'credit-card',
+  'gamepad-2',
+  'music',
+  'shirt',
+  'book',
+  'coffee',
+  'pizza',
+  'beer',
+  'cigarette',
+  'pill',
+  'gift',
+  'plane',
+  'hotel',
+  'camera',
+  'gamepad',
+  'tv',
+  'headphones',
+  'laptop',
+  'smartphone',
+  'watch',
+  'glasses',
+  'dumbbell',
+  'bike',
+  'dog',
+  'flower',
+  'hammer',
+  'wrench',
+  'paintbrush',
+  'bookmark',
+  'star',
 ];
 
-export function IconPicker({ selectedIcon, onIconChange, selectedColor, label = 'Ícone' }: IconPickerProps) {
+export function IconPicker({ selectedIcon, onIconChange, selectedColor, label }: IconPickerProps) {
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const visibleIcons = showAll ? iconOptions : iconOptions.slice(0, 16);
 
   return (
     <div className="space-y-2 px-6">
-      <Label>{label}</Label>
+      <Label>{label ?? t('expenseForm.icon')}</Label>
       <div className="grid grid-cols-4 gap-2">
-        {visibleIcons.map((option, index) => (
+        {visibleIcons.map((icon) => (
           <button
-            key={index}
+            key={icon}
             type="button"
-            onClick={() => onIconChange(option.icon)}
+            onClick={() => onIconChange(icon)}
             className={`p-3 rounded-lg border-2 transition-all hover:scale-105 ${
-              selectedIcon === option.icon 
-                ? 'border-primary bg-primary/10' 
+              selectedIcon === icon
+                ? 'border-primary bg-primary/10'
                 : 'border-border hover:border-primary/50'
             }`}
           >
-            <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: selectedColor }}>
-              <DynamicIcon name={option.icon} className="w-4 h-4 text-white" />
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center mx-auto"
+              style={{ backgroundColor: selectedColor }}
+            >
+              <DynamicIcon name={icon} className="w-4 h-4 text-white" />
             </div>
           </button>
         ))}
@@ -91,12 +96,12 @@ export function IconPicker({ selectedIcon, onIconChange, selectedColor, label = 
           {showAll ? (
             <>
               <ChevronUp className="w-4 h-4 mr-2" />
-              Ver menos
+              {t('expenseForm.showLess')}
             </>
           ) : (
             <>
               <ChevronDown className="w-4 h-4 mr-2" />
-              Ver mais
+              {t('expenseForm.showMore')}
             </>
           )}
         </Button>

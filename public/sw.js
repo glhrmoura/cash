@@ -1,5 +1,5 @@
-const APP_VERSION = 17;
-const CACHE_NAME = `cash-app-v${APP_VERSION}-${Date.now()}`;
+const APP_VERSION = '0.1.17';
+const CACHE_NAME = `cash-app-v${APP_VERSION}`;
 const STATIC_CACHE = `cash-app-static-v${APP_VERSION}`;
 const DYNAMIC_CACHE = `cash-app-dynamic-v${APP_VERSION}`;
 const FONT_CACHE = `cash-app-fonts-v${APP_VERSION}`;

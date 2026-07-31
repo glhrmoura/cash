@@ -21,13 +21,18 @@ export function useCurrencyMask(initialValue: string = '') {
     setValue(formatted);
   }, [formatCurrency]);
 
-  const getNumericValue = useCallback(() => {
-    if (value === '') return 0;
+  const getNumericValue = useCallback((): number | null => {
+    if (value === '') return null;
     const numericString = value.replace(/\./g, '').replace(',', '.');
     return parseFloat(numericString);
   }, [value]);
 
-  const setFormattedValue = useCallback((numericValue: number) => {
+  const setFormattedValue = useCallback((numericValue: number | null) => {
+    if (numericValue == null) {
+      setValue('');
+      return;
+    }
+
     const formatted = numericValue.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,

@@ -1,0 +1,87 @@
+{
+  "app": {
+    "name": "Cash",
+    "tagline": "Expense tracker"
+  },
+  "nav": {
+    "back": "Back",
+    "settings": "Settings"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "logOut": "Log out"
+  },
+  "home": {
+    "total": "Total",
+    "paid": "Paid",
+    "pending": "Pending",
+    "expenses": "Expenses",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "emptyTitle": "No expenses yet",
+    "emptyDescription": "Add your first expense to get started",
+    "addExpense": "Add expense"
+  },
+  "months": {
+    "0": "January",
+    "1": "February",
+    "2": "March",
+    "3": "April",
+    "4": "May",
+    "5": "June",
+    "6": "July",
+    "7": "August",
+    "8": "September",
+    "9": "October",
+    "10": "November",
+    "11": "December"
+  },
+  "expenseForm": {
+    "addTitle": "Add new bill",
+    "editTitle": "Edit bill",
+    "name": "Bill name",
+    "namePlaceholder": "e.g. Netflix, Gym...",
+    "value": "Amount (R$) (Optional)",
+    "valuePlaceholder": "e.g. 29.90",
+    "color": "Color",
+    "icon": "Icon",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "cancel": "Cancel",
+    "add": "Add",
+    "save": "Save"
+  },
+  "deleteExpense": {
+    "title": "Delete expense",
+    "description": "Are you sure you want to delete \"{{title}}\"?",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "config": {
+    "title": "Settings",
+    "description": "Customize Cash's appearance.",
+    "language": "Language",
+    "languageDescription": "Choose the app language.",
+    "primaryColor": "Primary color",
+    "primaryColorDescription": "Choose the app's accent color.",
+    "example": "Example",
+    "exampleDescription": "Preview of how the color appears in the app.",
+    "exampleButton": "Example",
+    "version": "Version",
+    "versionDescription": "Current app version.",
+    "versionUnavailable": "—",
+    "langPt": "Português (Brasil)",
+    "langEn": "English (US)",
+    "langEs": "Español (España)"
+  },
+  "install": {
+    "title": "Install Cash",
+    "description": "Install the app for quick access to your bills",
+    "action": "Install"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "action": "Return to home"
+  }
+}

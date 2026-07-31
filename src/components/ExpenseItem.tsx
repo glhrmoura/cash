@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 interface ExpenseItemProps {
   id: string;
   title: string;
-  value: number;
+  value: number | null;
   color: string;
   icon: IconName;
   isPaid: boolean;
@@ -63,12 +63,14 @@ export function ExpenseItem({
             )}>
               {title}
             </h3>
-            <p className={cn(
-              'text-sm',
-              isPaid ? 'text-muted-foreground' : 'text-muted-foreground'
-            )}>
-              R$ {value.toFixed(2).replace('.', ',')}
-            </p>
+            {value != null && (
+              <p className={cn(
+                'text-sm',
+                isPaid ? 'text-muted-foreground' : 'text-muted-foreground'
+              )}>
+                R$ {value.toFixed(2).replace('.', ',')}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">

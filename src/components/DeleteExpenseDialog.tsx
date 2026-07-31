@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +25,8 @@ export function DeleteExpenseDialog({
   expense,
   onConfirmDelete,
 }: DeleteExpenseDialogProps) {
+  const { t } = useTranslation();
+
   const handleConfirm = () => {
     if (expense) {
       onConfirmDelete(expense.id);
@@ -35,18 +38,20 @@ export function DeleteExpenseDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Excluir Despesa</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteExpense.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja excluir a conta <strong>"{expense?.title}"</strong>?
+            {t('deleteExpense.description', { title: expense?.title ?? '' })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="ghost bg-background text-foreground hover:bg-gray-900 hover:text-foreground">Cancelar</AlertDialogCancel>
+          <AlertDialogCancel className="ghost bg-background text-foreground hover:bg-gray-900 hover:text-foreground">
+            {t('deleteExpense.cancel')}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            Excluir
+            {t('deleteExpense.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

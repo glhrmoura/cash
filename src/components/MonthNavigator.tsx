@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -13,12 +14,8 @@ export function MonthNavigator({
   onPreviousMonth,
   onNextMonth,
 }: MonthNavigatorProps) {
-  const monthNames = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-  ];
-
-  const monthName = monthNames[currentMonth.getMonth()];
+  const { t } = useTranslation();
+  const monthName = t(`months.${currentMonth.getMonth()}`);
   const year = currentMonth.getFullYear();
 
   return (
@@ -31,11 +28,11 @@ export function MonthNavigator({
       >
         <ChevronLeft className="w-5 h-5" />
       </Button>
-      
+
       <h2 className="text-xl font-bold text-center">
         {monthName} {year}
       </h2>
-      
+
       <Button
         variant="ghost"
         size="icon"

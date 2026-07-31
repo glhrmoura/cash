@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -46,13 +47,14 @@ const colorOptions = [
   '#FCA5A5',
 ];
 
-export function ColorPicker({ selectedColor, onColorChange, label = 'Cor' }: ColorPickerProps) {
+export function ColorPicker({ selectedColor, onColorChange, label }: ColorPickerProps) {
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const visibleColors = showAll ? colorOptions : colorOptions.slice(0, 12);
 
   return (
     <div className="space-y-2 px-6">
-      <Label>{label}</Label>
+      <Label>{label ?? t('expenseForm.color')}</Label>
       <div className="grid grid-cols-6 gap-2">
         {visibleColors.map((color, index) => (
           <button
@@ -60,8 +62,8 @@ export function ColorPicker({ selectedColor, onColorChange, label = 'Cor' }: Col
             type="button"
             onClick={() => onColorChange(color)}
             className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-105 ${
-              selectedColor === color 
-                ? 'border-primary ring-2 ring-primary/20' 
+              selectedColor === color
+                ? 'border-primary ring-2 ring-primary/20'
                 : 'border-border hover:border-primary/50'
             }`}
             style={{ backgroundColor: color }}
@@ -79,12 +81,12 @@ export function ColorPicker({ selectedColor, onColorChange, label = 'Cor' }: Col
           {showAll ? (
             <>
               <ChevronUp className="w-4 h-4 mr-2" />
-              Ver menos
+              {t('expenseForm.showLess')}
             </>
           ) : (
             <>
               <ChevronDown className="w-4 h-4 mr-2" />
-              Ver mais
+              {t('expenseForm.showMore')}
             </>
           )}
         </Button>

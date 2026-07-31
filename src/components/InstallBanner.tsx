@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
@@ -9,12 +10,12 @@ interface BeforeInstallPromptEvent extends Event {
 
 const DISMISS_STORAGE_KEY = 'cash:install-banner-dismissed';
 
-const isStandalone = () => (
-  window.matchMedia('(display-mode: standalone)').matches
-  || ('standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone))
-);
+const isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  ('standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone));
 
 export function InstallBanner() {
+  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
@@ -49,7 +50,7 @@ export function InstallBanner() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       localStorage.setItem(DISMISS_STORAGE_KEY, 'true');
       setShowInstallPrompt(false);
@@ -68,21 +69,14 @@ export function InstallBanner() {
     <div className="fixed bottom-4 left-4 right-4 z-[100] bg-background border border-border rounded-lg p-4 shadow-lg">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="font-semibold text-foreground">Instalar Cash</h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Instale o app para acessar rapidamente suas contas
-          </p>
+          <h3 className="font-semibold text-foreground">{t('install.title')}</h3>
+          <p className="text-sm text-muted-foreground mt-1">{t('install.description')}</p>
         </div>
         <div className="flex items-center gap-2 ml-4">
           <Button onClick={handleInstallClick} size="sm">
-            Instalar
+            {t('install.action')}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDismiss}
-            className="h-8 w-8 p-0"
-          >
+          <Button variant="ghost" size="sm" onClick={handleDismiss} className="h-8 w-8 p-0">
             <X className="h-4 w-4" />
           </Button>
         </div>

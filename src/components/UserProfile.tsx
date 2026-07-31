@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -7,6 +8,7 @@ import { LogIn, LogOut, User } from 'lucide-react';
 import ThreeDotsLoader from '@/components/ThreeDotsLoader';
 
 const UserProfile: React.FC = () => {
+  const { t } = useTranslation();
   const { user, logout, signInWithGoogle } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
 
@@ -32,7 +34,7 @@ const UserProfile: React.FC = () => {
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(word => word.charAt(0))
+      .map((word) => word.charAt(0))
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -49,12 +51,12 @@ const UserProfile: React.FC = () => {
         {signingIn ? (
           <>
             <ThreeDotsLoader size="sm" className="mr-2" />
-            Entrando...
+            {t('auth.signingIn')}
           </>
         ) : (
           <>
             <LogIn className="mr-2 h-4 w-4" />
-            Entrar
+            {t('auth.signIn')}
           </>
         )}
       </Button>
@@ -76,19 +78,15 @@ const UserProfile: React.FC = () => {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
-            {user.displayName && (
-              <p className="font-medium">{user.displayName}</p>
-            )}
+            {user.displayName && <p className="font-medium">{user.displayName}</p>}
             {user.email && (
-              <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {user.email}
-              </p>
+              <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
             )}
           </div>
         </div>
         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>{t('auth.logOut')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

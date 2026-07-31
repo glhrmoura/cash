@@ -1,0 +1,87 @@
+{
+  "app": {
+    "name": "Cash",
+    "tagline": "Control de gastos"
+  },
+  "nav": {
+    "back": "Volver",
+    "settings": "Configuración"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signingIn": "Entrando...",
+    "logOut": "Salir"
+  },
+  "home": {
+    "total": "Total",
+    "paid": "Pagado",
+    "pending": "Pendientes",
+    "expenses": "Gastos",
+    "sortNewest": "Más recientes",
+    "sortOldest": "Más antiguas",
+    "emptyTitle": "Aún no hay gastos",
+    "emptyDescription": "Agrega tu primer gasto para comenzar",
+    "addExpense": "Agregar gasto"
+  },
+  "months": {
+    "0": "Enero",
+    "1": "Febrero",
+    "2": "Marzo",
+    "3": "Abril",
+    "4": "Mayo",
+    "5": "Junio",
+    "6": "Julio",
+    "7": "Agosto",
+    "8": "Septiembre",
+    "9": "Octubre",
+    "10": "Noviembre",
+    "11": "Diciembre"
+  },
+  "expenseForm": {
+    "addTitle": "Agregar nueva cuenta",
+    "editTitle": "Editar cuenta",
+    "name": "Nombre de la cuenta",
+    "namePlaceholder": "Ej: Netflix, Gimnasio...",
+    "value": "Valor (R$) (Opcional)",
+    "valuePlaceholder": "Ej: 29,90",
+    "color": "Color",
+    "icon": "Ícono",
+    "showMore": "Ver más",
+    "showLess": "Ver menos",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "save": "Guardar"
+  },
+  "deleteExpense": {
+    "title": "Eliminar gasto",
+    "description": "¿Seguro que deseas eliminar la cuenta \"{{title}}\"?",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar"
+  },
+  "config": {
+    "title": "Configuración",
+    "description": "Personaliza la apariencia de Cash.",
+    "language": "Idioma",
+    "languageDescription": "Elige el idioma de la app.",
+    "primaryColor": "Color principal",
+    "primaryColorDescription": "Elige el color de acento de la app.",
+    "example": "Ejemplo",
+    "exampleDescription": "Vista previa de cómo aparece el color en la app.",
+    "exampleButton": "Ejemplo",
+    "version": "Versión",
+    "versionDescription": "Versión actual de la aplicación.",
+    "versionUnavailable": "—",
+    "langPt": "Português (Brasil)",
+    "langEn": "English (US)",
+    "langEs": "Español (España)"
+  },
+  "install": {
+    "title": "Instalar Cash",
+    "description": "Instala la app para acceder rápido a tus cuentas",
+    "action": "Instalar"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "action": "Volver al inicio"
+  }
+}
