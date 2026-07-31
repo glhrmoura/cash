@@ -133,7 +133,7 @@
   }
 
   .app-config {
-    padding-top: calc(5.5rem + var(--safe-area-top));
+    padding-top: calc(6rem + var(--safe-area-top));
     padding-right: 1rem;
     padding-bottom: calc(2rem + var(--safe-area-bottom));
     padding-left: 1rem;
