@@ -63,7 +63,7 @@ export function ExpenseItem({
             )}>
               {title}
             </h3>
-            {value != null && (
+            {value != null && value !== 0 && (
               <p className={cn(
                 'text-sm',
                 isPaid ? 'text-muted-foreground' : 'text-muted-foreground'

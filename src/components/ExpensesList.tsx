@@ -82,7 +82,7 @@ export function ExpensesList({
   const unpaidValue = expenses
     .filter((expense) => !paidExpenses.has(expense.id))
     .reduce((sum, expense) => sum + (expense.value ?? 0), 0);
-  const hasAnyValue = expenses.some((expense) => expense.value != null);
+  const hasAnyValue = expenses.some((expense) => expense.value != null && expense.value !== 0);
 
   return (
     <div className="space-y-4">

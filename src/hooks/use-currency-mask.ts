@@ -4,12 +4,12 @@ export function useCurrencyMask(initialValue: string = '') {
   const [value, setValue] = useState(initialValue);
 
   const formatCurrency = useCallback((input: string) => {
-    let numericValue = input.replace(/\D/g, '');
-    
-    if (numericValue === '') return '';
-    
+    const numericValue = input.replace(/\D/g, '');
+
+    if (numericValue === '' || parseInt(numericValue, 10) === 0) return '';
+
     const number = parseInt(numericValue, 10) / 100;
-    
+
     return number.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -24,11 +24,13 @@ export function useCurrencyMask(initialValue: string = '') {
   const getNumericValue = useCallback((): number | null => {
     if (value === '') return null;
     const numericString = value.replace(/\./g, '').replace(',', '.');
-    return parseFloat(numericString);
+    const parsed = parseFloat(numericString);
+    if (!Number.isFinite(parsed) || parsed === 0) return null;
+    return parsed;
   }, [value]);
 
   const setFormattedValue = useCallback((numericValue: number | null) => {
-    if (numericValue == null) {
+    if (numericValue == null || numericValue === 0) {
       setValue('');
       return;
     }
