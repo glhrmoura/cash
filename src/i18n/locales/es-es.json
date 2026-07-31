@@ -39,9 +39,9 @@
     "11": "Diciembre"
   },
   "expenseForm": {
-    "addTitle": "Agregar nueva cuenta",
-    "editTitle": "Editar cuenta",
-    "name": "Nombre de la cuenta",
+    "addTitle": "Agregar Gasto",
+    "editTitle": "Editar Gasto",
+    "name": "Nombre del gasto",
     "namePlaceholder": "Ej: Netflix, Gimnasio...",
     "value": "Valor (R$) (Opcional)",
     "valuePlaceholder": "Ej: 29,90",
@@ -55,7 +55,7 @@
   },
   "deleteExpense": {
     "title": "Eliminar gasto",
-    "description": "¿Seguro que deseas eliminar la cuenta \"{{title}}\"?",
+    "description": "¿Seguro que deseas eliminar el gasto \"{{title}}\"?",
     "cancel": "Cancelar",
     "confirm": "Eliminar"
   },

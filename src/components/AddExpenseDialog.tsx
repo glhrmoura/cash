@@ -106,7 +106,7 @@ export function AddExpenseDialog({ onAddExpense, trigger }: AddExpenseDialogProp
                 </button>
               </div>
               <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-                <div className="space-y-4 flex-1 overflow-y-auto py-4">
+                <div className="space-y-4 flex-1 overflow-y-auto overscroll-none py-4">
                   <div className="space-y-2 px-6">
                     <Label htmlFor="title">{t('expenseForm.name')}</Label>
                     <Input

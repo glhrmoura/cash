@@ -39,9 +39,9 @@
     "11": "Dezembro"
   },
   "expenseForm": {
-    "addTitle": "Adicionar Nova Conta",
-    "editTitle": "Editar Conta",
-    "name": "Nome da Conta",
+    "addTitle": "Adicionar Despesa",
+    "editTitle": "Editar Despesa",
+    "name": "Nome da Despesa",
     "namePlaceholder": "Ex: Netflix, Academia...",
     "value": "Valor (R$) (Opcional)",
     "valuePlaceholder": "Ex: 29,90",
@@ -55,7 +55,7 @@
   },
   "deleteExpense": {
     "title": "Excluir Despesa",
-    "description": "Tem certeza que deseja excluir a conta \"{{title}}\"?",
+    "description": "Tem certeza que deseja excluir a despesa \"{{title}}\"?",
     "cancel": "Cancelar",
     "confirm": "Excluir"
   },

@@ -39,9 +39,9 @@
     "11": "December"
   },
   "expenseForm": {
-    "addTitle": "Add new bill",
-    "editTitle": "Edit bill",
-    "name": "Bill name",
+    "addTitle": "Add Expense",
+    "editTitle": "Edit Expense",
+    "name": "Expense name",
     "namePlaceholder": "e.g. Netflix, Gym...",
     "value": "Amount (R$) (Optional)",
     "valuePlaceholder": "e.g. 29.90",
@@ -55,7 +55,7 @@
   },
   "deleteExpense": {
     "title": "Delete expense",
-    "description": "Are you sure you want to delete \"{{title}}\"?",
+    "description": "Are you sure you want to delete the expense \"{{title}}\"?",
     "cancel": "Cancel",
     "confirm": "Delete"
   },
