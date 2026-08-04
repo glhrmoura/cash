@@ -79,13 +79,28 @@ const Index = () => {
   const handleTogglePaid = async (expenseId: string) => {
     const expense = expenses.find(exp => exp.id === expenseId);
     if (!expense) return;
-    
+
     const isCurrentlyPaid = expense.done.includes(currentMonthKey);
-    
+    const previousDone = expense.done;
+    const nextDone = isCurrentlyPaid
+      ? expense.done.filter((month) => month !== currentMonthKey)
+      : [...expense.done, currentMonthKey];
+
+    setExpenses((prev) =>
+      prev.map((exp) =>
+        exp.id === expenseId ? { ...exp, done: nextDone } : exp
+      )
+    );
+
     try {
-      await expenseService.toggleExpenseDone(expenseId, currentMonthKey, !isCurrentlyPaid, userId);
+      await expenseService.updateExpense(expenseId, { done: nextDone }, userId);
     } catch (error) {
       console.error('Error updating expense done status:', error);
+      setExpenses((prev) =>
+        prev.map((exp) =>
+          exp.id === expenseId ? { ...exp, done: previousDone } : exp
+        )
+      );
     }
   };
 
