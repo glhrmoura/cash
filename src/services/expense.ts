@@ -77,42 +77,6 @@ export const expenseService = {
     await updateDoc(expenseRef, updates);
   },
 
-  async toggleExpenseDone(expenseId: string, monthKey: string, isDone: boolean, userId?: string): Promise<void> {
-    if (userId && isGuest(userId)) {
-      const expenses = readLocalExpenses();
-      const index = expenses.findIndex((expense) => expense.id === expenseId);
-      if (index === -1) return;
-
-      const currentDone = expenses[index].done || [];
-      const newDone = isDone
-        ? (currentDone.includes(monthKey) ? currentDone : [...currentDone, monthKey])
-        : currentDone.filter((month) => month !== monthKey);
-
-      expenses[index] = { ...expenses[index], done: newDone };
-      writeLocalExpenses(expenses);
-      return;
-    }
-
-    const expenseRef = doc(db, EXPENSES_COLLECTION, expenseId);
-    const expenseDoc = await getDocs(query(
-      collection(db, EXPENSES_COLLECTION),
-      where('__name__', '==', expenseId)
-    ));
-    
-    if (!expenseDoc.empty) {
-      const currentDone = expenseDoc.docs[0].data().done || [];
-      let newDone: string[];
-      
-      if (isDone) {
-        newDone = currentDone.includes(monthKey) ? currentDone : [...currentDone, monthKey];
-      } else {
-        newDone = currentDone.filter((month: string) => month !== monthKey);
-      }
-      
-      await updateDoc(expenseRef, { done: newDone });
-    }
-  },
-
   async deleteExpense(expenseId: string, userId?: string): Promise<void> {
     if (userId && isGuest(userId)) {
       const expenses = readLocalExpenses().filter((expense) => expense.id !== expenseId);
